@@ -34,7 +34,7 @@
         var welcomeSlide = $('.hero-slides');
         welcomeSlide.owlCarousel({
             items: 2,
-            margin: 30,
+            margin: 1,
             loop: true,
             center: true,
             autoplay: true,
@@ -107,7 +107,7 @@
 
     // :: Countdown Active Code
     if ($.fn.countdown) {
-        $('#clock').countdown('2020/10/10', function (event) {
+        $('#clock').countdown('2018/06/28', function (event) {
             $(this).html(event.strftime('<div>%D <span>Days</span></div> <div>%H <span>Hours</span></div> <div>%M <span>Minutes</span></div> <div>%S <span>Seconds</span></div>'));
         });
     }
