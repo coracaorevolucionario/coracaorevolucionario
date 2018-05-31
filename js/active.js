@@ -1,92 +1,118 @@
 (function ($) {
     'use strict';
 
+    var $window = $(window);
+
+    // :: Preloader Active Code
+    $window.on('load', function () {
+        $('#preloader').fadeOut('slow', function () {
+            $(this).remove();
+        });
+    });
+
+    // :: Nav Active Code
+    if ($.fn.classyNav) {
+        $('#originalNav').classyNav();
+        $('#footerNav').classyNav();
+    }
+
+    // :: Newsticker Active Code
+    if ($.fn.simpleTicker) {
+        $.simpleTicker($("#breakingNewsTicker"), {
+            speed: 1000,
+            delay: 3500,
+            easing: 'swing',
+            effectType: 'roll'
+        });
+    }
+
+    // :: Tooltip Active Code
+    $('[data-toggle="tooltip"]').tooltip();
+
+    // :: Owl Carousel Active Code
     if ($.fn.owlCarousel) {
-        // :: 1.0 Welcome Post Slider Active Code
-        $(".welcome-post-sliders").owlCarousel({
-            items: 4,
+        var welcomeSlide = $('.hero-slides');
+        welcomeSlide.owlCarousel({
+            items: 2,
+            margin: 1,
+            loop: true,
+            center: true,
+            autoplay: true,
+            nav: true,
+            navText: ['<i class="fa fa-angle-left"></i>', '<i class="fa fa-angle-right"></i>'],
+            autoplayTimeout: 5000, // Autoplay Timeout 1s = 1000ms
+            smartSpeed: 2000
+        });
+
+        welcomeSlide.on('translate.owl.carousel', function () {
+            var slideLayer = $("[data-animation]");
+            slideLayer.each(function () {
+                var anim_name = $(this).data('animation');
+                $(this).removeClass('animated ' + anim_name).css('opacity', '0');
+            });
+        });
+
+        welcomeSlide.on('translated.owl.carousel', function () {
+            var slideLayer = welcomeSlide.find('.owl-item.active').find("[data-animation]");
+            slideLayer.each(function () {
+                var anim_name = $(this).data('animation');
+                $(this).addClass('animated ' + anim_name).css('opacity', '1');
+            });
+        });
+
+        $("[data-delay]").each(function () {
+            var anim_del = $(this).data('delay');
+            $(this).css('animation-delay', anim_del);
+        });
+
+        $("[data-duration]").each(function () {
+            var anim_dur = $(this).data('duration');
+            $(this).css('animation-duration', anim_dur);
+        });
+
+        $('.instagram-slides').owlCarousel({
+            items: 7,
+            margin: 0,
             loop: true,
             autoplay: true,
-            smartSpeed: 1500,
-            margin: 10,
-            nav: true,
-            navText: ['', ''],
+            autoplayHoverPause: true,
+            autoplayTimeout: 2000, // Autoplay Timeout 1s = 1000ms
+            smartSpeed: 2000,
             responsive: {
-                320: {
-                    items: 1
-                },
-                576: {
+                0: {
                     items: 2
-                },
-                992: {
-                    items: 3
-                },
-                1200: {
-                    items: 4
-                }
-            }
-        })
-        // :: 2.0 Instagram Slider Active Code
-        $(".instargram_area").owlCarousel({
-            items: 6,
-            loop: true,
-            autoplay: true,
-            smartSpeed: 800,
-            nav: true,
-            navText: ['', ''],
-            responsive: {
-                320: {
-                    items: 1
                 },
                 480: {
-                    items: 2
-                },
-                576: {
                     items: 3
                 },
-                768: {
+                576: {
                     items: 4
                 },
                 992: {
                     items: 5
                 },
-                1200: {
-                    items: 6
+                1500: {
+                    items: 7
                 }
             }
-        })
-        // :: 3.0 Related Post Slider Active Code
-        $(".related-post-slider").owlCarousel({
-            items: 3,
-            loop: true,
-            autoplay: true,
-            smartSpeed: 800,
-            nav: true,
-            margin: 30,
-            navText: ['<i class="fa fa-angle-left" aria-hidden="true"></i>', '<i class="fa fa-angle-right" aria-hidden="true"></i>'],
-            responsive: {
-                320: {
-                    items: 1
-                },
-                480: {
-                    items: 2
-                },
-                768: {
-                    items: 3
-                }
-            }
-        })
-    }
-
-    // :: 4.0 ScrollUp Active JS
-    if ($.fn.scrollUp) {
-        $.scrollUp({
-            scrollSpeed: 1500,
-            scrollText: '<i class="fa fa-arrow-up" aria-hidden="true"></i>'
         });
     }
 
-    // :: 5.0 CounterUp Active JS
+    // :: Sticky Active Code
+    if ($.fn.sticky) {
+        $("#stickyNav").sticky({
+            topSpacing: 0
+        });
+    }
+
+    // :: Countdown Active Code
+    if ($.fn.countdown) {
+        $('#clock').countdown('2018/06/28', function (event) {
+            $(this).html(event.strftime('<div>%D <span>Days</span></div> <div>%H <span>Hours</span></div> <div>%M <span>Minutes</span></div> <div>%S <span>Seconds</span></div>'));
+        });
+    }
+
+    // :: CounterUp Active Code
     if ($.fn.counterUp) {
         $('.counter').counterUp({
             delay: 10,
@@ -94,42 +120,23 @@
         });
     }
 
-    // :: 6.0 PreventDefault a Click
+    // :: ScrollUp Active Code
+    if ($.fn.scrollUp) {
+        $.scrollUp({
+            scrollSpeed: 1000,
+            easingType: 'easeInOutQuart',
+            scrollText: 'Top'
+        });
+    }
+
+    // :: PreventDefault a Click
     $("a[href='#']").on('click', function ($) {
         $.preventDefault();
     });
 
-    // :: 7.0 Search Form Active Code
-    $(".searchBtn").on('click', function () {
-        $(".search-hidden-form").toggleClass("search-form-open");
-    });
-
-    // :: 8.0 Search Form Active Code
-    $("#pattern-switcher").on('click', function () {
-        $("body").toggleClass("bg-pattern");
-    });
-    $("#patter-close").on('click', function () {
-        $(this).hide("slow");
-        $("#pattern-switcher").addClass("pattern-remove");
-    });
-
-    // :: 9.0 wow Active Code
-    if ($.fn.init) {
+    // :: WOW Active Code
+    if ($window.width() > 767) {
         new WOW().init();
     }
-
-    // :: 10.0 matchHeight Active JS
-    if ($.fn.matchHeight) {
-        $('.item').matchHeight();
-    }
-
-    var $window = $(window);
-
-    // :: 11.0 Preloader active code
-    $window.on('load', function () {
-        $('#preloader').fadeOut('slow', function () {
-            $(this).remove();
-        });
-    });
 
 })(jQuery);
